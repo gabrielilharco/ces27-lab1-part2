@@ -77,9 +77,12 @@ func (master *Master) acceptMultipleConnections() {
 
 // handleFailingWorkers will handle workers that fails during an operation.
 func (master *Master) handleFailingWorkers() {
-	/////////////////////////
-	// YOUR CODE GOES HERE //
-	/////////////////////////
+	for worker := range master.failedWorkerChan {
+		master.workersMutex.Lock()
+		log.Printf("Removing worker %d from master list\n", worker.id)
+		delete(master.workers, worker.id)
+		master.workersMutex.Unlock()
+	}
 }
 
 // Handle a single connection until it's done, then closes it.
